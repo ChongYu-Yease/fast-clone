@@ -1,6 +1,4 @@
-/**
- * 下载仓库
- */
+const chalk = require('chalk')
 const execa = require('execa') /*执行指令*/
 /**
  * 思路
@@ -11,18 +9,47 @@ const execa = require('execa') /*执行指令*/
  */
 
 /**
- *
+ * 下载仓库
  * @param {仓库地址} url
  */
-module.exports = function (url) {
-    if (!url.includes('cnpmjs.org')) {
-        const urlParams = url.split('github.com')
-        const downloadUrl = `${urlParams[0]}github.com.cnpmjs.org${urlParams[1]}`
-        const downloadShell = `git clone ${downloadUrl}`
+module.exports = async function (url) {
+    if (url.includes('cnpmjs.org')) {
+        const downloadShell = `git clone ${url}`
+
+        const start = Date.now()
+
         await execa(downloadShell, {
             shell: true,
             stdio: [2, 2, 2],
         })
+
+        const end = Date.now()
+
+        console.log(
+            chalk.greenBright(`\n下载耗时：${(end - start).toFixed(2)} ms\n`)
+        )
+
+        process.exit(1)
     } else {
+        const urlParams = url.split('github.com')
+
+        const downloadUrl = `${urlParams[0]}github.com.cnpmjs.org${urlParams[1]}`
+
+        const downloadShell = `git clone ${downloadUrl}`
+
+        const start = Date.now()
+
+        await execa(downloadShell, {
+            shell: true,
+            stdio: [2, 2, 2],
+        })
+
+        const end = Date.now()
+
+        console.log(
+            chalk.greenBright(`\n下载耗时：${(end - start).toFixed(2)} ms\n`)
+        )
+
+        process.exit(1)
     }
 }

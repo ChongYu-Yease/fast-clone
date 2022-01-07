@@ -1,6 +1,6 @@
 {
     "name": "@xuchongyu/fast-clone",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "description": "加速 clone",
     "type": "commonjs",
     "bin": {
@@ -12,16 +12,19 @@
         "url": " https://github.com/ChongYu-Yease/cli-template.git"
     },
     "keywords": [
-        "cli-template"
+        "fast",
+        "fast-clone",
+        "clone"
     ],
     "author": "xuchongyu",
     "license": "MIT",
     "dependencies": {
-        "chalk": "^5.0.0",
+        "chalk": "^4.1.2",
         "co": "^4.6.0",
         "co-prompt": "^1.0.0",
         "commander": "^8.3.0",
+        "execa": "^5.1.1",
         "is-online": "^9.0.1",
-        "ora": "^6.0.1"
+        "ora": "^5.4.1"
     }
 }
