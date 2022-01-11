@@ -1,16 +1,21 @@
 // 检测网络
 const isOnline = require('is-online')
 const chalk = require('chalk')
+const ora = require('ora')
 /**
  * 检查网络
  */
 module.exports = async () => {
+    const spinner = ora('正在检查网络...').start()
     const online = await isOnline({
         timeout: 1000,
         version: 'v4',
     })
     if (!online) {
-        console.log(chalk.red('请检查网络,稍后重试'))
+        spinner.fail(chalk.red('请检查网络,稍后重试\n'))
+
         process.exit(1)
+    } else {
+        spinner.succeed(chalk.greenBright('网络检测完成\n'))
     }
 }

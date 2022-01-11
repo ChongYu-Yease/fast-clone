@@ -25,7 +25,9 @@ module.exports = async function (url) {
     const end = Date.now()
 
     console.log(
-        chalk.greenBright(`\ngit下载耗时：${(end - start).toFixed(2)} ms\n`)
+        chalk.greenBright(
+            `\ngit下载耗时:${((end - start) / 1000).toFixed(2)} 秒\n`
+        )
     )
 
     process.exit(1)
