@@ -52,9 +52,9 @@ module.exports = async function (url) {
     const end = Date.now()
 
     console.log(
-        chalk.greenBright(
-            `\nfast下载耗时:${((end - start) / 1000).toFixed(2)} 秒\n`
-        )
+        `\n${chalk.greenBright(
+            `fast下载耗时:${((end - start) / 1000).toFixed(2)} 秒`
+        )}\n`
     )
     process.exit(1)
 }
