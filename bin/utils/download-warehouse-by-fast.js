@@ -8,40 +8,46 @@ const getDownloadOption = require('./get-download-option')
  */
 
 module.exports = async function (url) {
-    const {
-        downloadCnpmShell,
-        download91chiShell,
-        downloadHubShell,
-        // cnpmDownloadUrl,
-        // chiDownloadUrl,
-        // hubDownloadUrl,
-    } = getDownloadOption(url)
+    const { downloadCnpmShell, download91chiShell, downloadHubShell } =
+        getDownloadOption(url)
 
     const start = Date.now()
 
-    const downloadCnpmResult = await execa(downloadCnpmShell, {
+    await execa(downloadCnpmShell, {
         shell: true,
         stdio: [2, 2, 2],
-    })
-
-    if (downloadCnpmResult.failed) {
-        console.log(chalk.redBright('第一路线下载失败，启用第二下载路线'))
-        const downloadHubResult = await execa(downloadHubShell, {
-            shell: true,
-            stdio: [2, 2, 2],
-        })
-        if (downloadHubResult.failed) {
-            console.log(chalk.redBright('第二路线下载失败，启用第三下载路线'))
-            const download91chiResult = await execa(download91chiShell, {
+    }).catch(async (error) => {
+        if (error.exitCode === 128) {
+            console.log(chalk.redBright('第一路线下载失败，启用第二下载路线'))
+            await execa(downloadHubShell, {
                 shell: true,
                 stdio: [2, 2, 2],
+            }).catch(async (error) => {
+                if (error.exitCode == 128) {
+                    console.log(
+                        chalk.redBright('第二路线下载失败，启用第三下载路线')
+                    )
+                    await execa(download91chiShell, {
+                        shell: true,
+                        stdio: [2, 2, 2],
+                    }).catch((error) => {
+                        if (error.exitCode === 128) {
+                            console.log(
+                                chalk.redBright('第三路线下载失败，请稍后重试')
+                            )
+                            process.exit(1)
+                        } else {
+                            process.exit(1)
+                        }
+                    })
+                } else {
+                    process.exit(1)
+                }
             })
-            if (download91chiResult.failed) {
-                console.log(chalk.redBright('第三路线下载失败，请稍后重试'))
-                process.exit(1)
-            }
+        } else {
+            process.exit(1)
         }
-    }
+    })
 
     const end = Date.now()
 

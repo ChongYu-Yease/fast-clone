@@ -15,7 +15,7 @@ npm i @xuchongyu/fast-clone -g
 ### 使用方法
 
 ```shell
-git clone <你的仓库地址>
+fast clone <你的仓库地址>
 ```
 
 ### 安装依赖

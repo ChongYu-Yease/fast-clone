@@ -1,7 +1,11 @@
-const execa = require('execa')
+#!/usr/bin/env node
+
+const checkNodeVersion = require('./bin/utils/check-node-version')
+checkNodeVersion()
 const path = require('path')
 const fs = require('fs')
 const chalk = require('chalk')
+const execa = require('execa')
 const inquirer = require('inquirer')
 
 // 询问用户 cli 测试的 名字
@@ -100,14 +104,14 @@ const initConfig = async () => {
         await writePackage(packageContent, answers)
 
         // 执行 npm unlink 移除全局指令 start
-        const unlinkCommand = 'npm unlink'
+        // const unlinkCommand = 'npm unlink'
 
-        await execa(unlinkCommand, {
-            shell: true,
-            stdio: [2, 2, 2],
-        })
+        // await execa(unlinkCommand, {
+        //     shell: true,
+        //     stdio: [2, 2, 2],
+        // })
 
-        console.log(chalk.blueBright('===> 已移除全局指令'))
+        // console.log(chalk.blueBright('===> 已移除全局指令\n'))
 
         // 执行 npm unlink 移除全局指令 end
         const publishCommand =
@@ -144,13 +148,13 @@ const initConfig = async () => {
         await writePackage(packageContent, answers)
 
         // 执行 npm unlink 移除全局指令 start
-        const unlinkCommand = 'npm unlink'
+        // const unlinkCommand = 'npm unlink'
 
-        await execa(unlinkCommand, {
-            shell: true,
-            stdio: [2, 2, 2],
-        })
-        console.log(chalk.blueBright('\n===> 已移除全局指令\n'))
+        // await execa(unlinkCommand, {
+        //     shell: true,
+        //     stdio: [2, 2, 2],
+        // })
+        // console.log(chalk.blueBright('\n===> 已移除全局指令\n'))
         // 执行 npm unlink 移除全局指令 end
 
         // 执行 npm link 移除全局指令 start
