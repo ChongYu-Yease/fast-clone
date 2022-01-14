@@ -30,7 +30,11 @@ const initQuestions = () => {
                     } else {
                         console.log(
                             chalk.redBright(
-                                'cli名称只能输入英文，数字，下划线，横线'
+                                `cli${
+                                    process.env.NODE_ENV === 'production'
+                                        ? '发布'
+                                        : '测试'
+                                }指令只能输入英文，数字，下划线，横线`
                             )
                         )
                     }
@@ -187,7 +191,7 @@ const initConfig = async () => {
     const isProduction = process.env.NODE_ENV === 'production'
     // 如果是发布
     if (isProduction) {
-        // 运行 npm unlink 指令
+        // 运行 npm unlink 指令 移除之前link的指令
         await runUnlinkCommand()
         // 获取下一个版本
         const newVersion = await updatePackageVersion()
@@ -203,8 +207,9 @@ const initConfig = async () => {
         // 发布
         await runPublishCommand(command)
     } else {
-        // 运行 npm unlink 指令
-        await runUnlinkCommand()
+        console.log('dev开发')
+        // 运行 npm unlink 指令 这里去掉unlink操作 原因就是 作为开发者 下载了 fast-clone 这个 cli 在本地进行二次开发的话 会把cli指令移除掉
+        // await runUnlinkCommand()
         // 安装依赖
         await runInstallCommand()
         // 获取cli指令
