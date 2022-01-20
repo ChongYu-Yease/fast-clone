@@ -1,6 +1,6 @@
 {
     "name": "@xuchongyu/fast-clone",
-    "version": "0.1.4",
+    "version": "0.1.5",
     "description": "加速 clone",
     "type": "commonjs",
     "bin": {

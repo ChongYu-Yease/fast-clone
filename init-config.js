@@ -8,6 +8,7 @@ const path = require('path')
 const fs = require('fs')
 const chalk = require('chalk')
 const inquirer = require('inquirer')
+const { re } = require('semver/internal/re')
 
 // 询问用户 cli 测试的 名字
 const initQuestions = () => {
@@ -127,12 +128,17 @@ const runLinkCommand = async () => {
 /**
  * 移除全局指令
  */
-const runUnlinkCommand = async () => {
-    // 执行 npm unlink 移除全局指令 start
-
+const runUnlinkCommand = async (command) => {
+    // 执行 npm unlink 移除全局指令 原来下载的cli 指令也会失效 所以采用删除的方式
     console.log(chalk.blueBright('\n===> 开始移除全局指令\n'))
 
-    await execa('npm unlink', {
+    // 获取cli包的地址
+    const { stdout } = await execa(`which ${command}`, {
+        shell: true,
+    })
+
+    // 开始执行删除
+    await execa(`rm -rf ${stdout}`, {
         shell: true,
         stdio: [2, 2, 2],
     })
@@ -182,7 +188,24 @@ const runPublishCommand = async () => {
         }
     })
 }
-
+/**
+ * 创建文件并记录指令
+ */
+const writeCommandFile = async (command) => {
+    const commandFilePath = path.resolve(__dirname, './command-db.json')
+    await fs.writeFileSync(
+        commandFilePath,
+        JSON.stringify({ command }, null, 4)
+    )
+}
+/**
+ * 读取文件内的指令名称
+ */
+const readCommandFile = async () => {
+    const commandFilePath = path.resolve(__dirname, './command-db.json')
+    const commandOption = await fs.readFileSync(commandFilePath)
+    return JSON.parse(commandOption)['command']
+}
 /**
  * 初始化配置
  */
@@ -191,8 +214,9 @@ const initConfig = async () => {
     const isProduction = process.env.NODE_ENV === 'production'
     // 如果是发布
     if (isProduction) {
+        const commandName = await readCommandFile()
         // 运行 npm unlink 指令 移除之前link的指令
-        await runUnlinkCommand()
+        await runUnlinkCommand(commandName)
         // 获取下一个版本
         const newVersion = await updatePackageVersion()
         const { command } = await initQuestions()
@@ -205,13 +229,11 @@ const initConfig = async () => {
         // 修改项目的package.json的内容
         await writePackage(packageValue)
         // 发布
-        await runPublishCommand(command)
+        await runPublishCommand()
     } else {
-        console.log('dev开发')
-        // 运行 npm unlink 指令 这里去掉unlink操作 原因就是 作为开发者 下载了 fast-clone 这个 cli 在本地进行二次开发的话 会把cli指令移除掉
-        // await runUnlinkCommand()
         // 安装依赖
-        await runInstallCommand()
+        // await runInstallCommand()
+
         // 获取cli指令
         const { command } = await initQuestions()
         const packageValue = {
@@ -219,6 +241,8 @@ const initConfig = async () => {
                 [command]: '/bin/index.js',
             },
         }
+        // 记录指令名称 记录到一个文件里
+        await writeCommandFile(command)
         // 修改项目的package.json的内容
         await writePackage(packageValue)
         // 执行 npm link 指令
