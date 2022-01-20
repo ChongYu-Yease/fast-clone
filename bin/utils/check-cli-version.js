@@ -13,17 +13,17 @@ const ora = require('ora')
  * 检查线上最新的脚手架版本号
  */
 module.exports = async function checkCliVersion() {
-    const spinner = ora(chalk.green('正在检查fast-clone版本'))
+    const spinner = ora(chalk.green('正在检查版本'))
     spinner.start()
     const request = promisify(require('request'))
     const result = await request({
         url: `https://registry.npmjs.org/${name}`,
         timeout: 3000,
     }).catch(() => {
-        spinner.fail(chalk.red(`fast-clone版本检查失败请重试一次`))
+        spinner.fail(chalk.red(`版本检查失败请重试一次`))
         process.exit(1)
     })
-    spinner.succeed(chalk.green(`fast-clone版本检查完成\n`))
+    spinner.succeed(chalk.green(`版本检查完成\n`))
     const { body, statusCode } = result
     if (statusCode === 200) {
         const parseBody = JSON.parse(body)

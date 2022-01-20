@@ -2,6 +2,7 @@
  *
  * @param {用户输入的仓库下载路径} url
  * @returns {
+ *              type 仓库类型 1:gitlab 2:码云 3:github
  *              downloadCnpmShell:cnmp的下载指令
  *              download91chiShell:91chi的下载指令
  *              downloadHubShell:hub的下载指令
@@ -12,24 +13,22 @@
  */
 
 module.exports = function getDownloadOption(url) {
+    // 如果下载地址是gitlab
     if (url.includes('gitlab')) {
+        // 从gitlab下载项目 无需加速
         return {
-            downloadCnpmShell: `git clone ${url}`,
-            download91chiShell: `git clone ${url}`,
-            downloadHubShell: `git clone ${url}`,
-            cnpmDownloadUrl: url,
-            chiDownloadUrl: url,
-            hubDownloadUrl: url,
+            type: 1,
+            downloadShell: `git clone ${url}`,
+        }
+    } else if (url.includes('gitee')) {
+        // 从码云下载项目 无需加速
+        return {
+            type: 2,
+            downloadShell: `git clone ${url}`,
         }
     } else {
-        /**
-         * 国内加速通道
-         * https://hub.fastgit.org/ChongYu-Yease/mini-cli.git
-         * https://github.com.cnpmjs.org/ChongYu-Yease/mini-cli.git
-         * https://github.91chi.fun//https://github.com/ChongYu-Yease/mini-cli.git
-         */
-        const isHub = url.includes('https://hub.fastgit.org/')
-        const isCnpmjs = url.includes('https://github.com.cnpmjs.org/')
+        const isHub = url.includes('https://hub.fastgit.org')
+        const isCnpmjs = url.includes('https://github.com.cnpmjs.org')
         const is91chi = url.includes('https://github.91chi.fun')
 
         if (isHub || isCnpmjs || is91chi) {
@@ -37,24 +36,24 @@ module.exports = function getDownloadOption(url) {
                 const hubUrlParams = url.split('hub.fastgit.org/')
                 const warehouseSuffix = hubUrlParams[hubUrlParams.length - 1]
                 return {
-                    downloadCnpmShell: `git clone https://github.com.cnpmjs.org/${warehouseSuffix}`,
-                    download91chiShell: `git clone https://github.91chi.fun//https://github.com/${warehouseSuffix}`,
-                    downloadHubShell: `git clone ${url}`,
-                    cnpmDownloadUrl: `https://github.com.cnpmjs.org/${warehouseSuffix}`,
-                    chiDownloadUrl: `https://github.91chi.fun//https://github.com/${warehouseSuffix}`,
-                    hubDownloadUrl: url,
+                    type: 3,
+                    downloadShell: [
+                        `git clone https://github.com.cnpmjs.org/${warehouseSuffix}`,
+                        `git clone https://github.91chi.fun//https://github.com/${warehouseSuffix}`,
+                        `git clone https://github.91chi.fun//https://github.com/${warehouseSuffix}`,
+                    ],
                 }
             }
             if (isCnpmjs) {
                 const cnpmUrlParams = url.split('github.com.cnpmjs.org/')
                 const warehouseSuffix = cnpmUrlParams[cnpmUrlParams.length - 1]
                 return {
-                    downloadCnpmShell: `git clone ${url}`,
-                    download91chiShell: `git clone https://github.91chi.fun//https://github.com/${warehouseSuffix}`,
-                    downloadHubShell: `git clone https://hub.fastgit.org/${warehouseSuffix}`,
-                    cnpmDownloadUrl: url,
-                    chiDownloadUrl: `https://github.91chi.fun//https://github.com/${warehouseSuffix}`,
-                    hubDownloadUrl: `https://hub.fastgit.org/${warehouseSuffix}`,
+                    type: 3,
+                    downloadShell: [
+                        `git clone ${url}`,
+                        `git clone https://github.91chi.fun//https://github.com/${warehouseSuffix}`,
+                        `git clone https://hub.fastgit.org/${warehouseSuffix}`,
+                    ],
                 }
             }
 
@@ -64,24 +63,24 @@ module.exports = function getDownloadOption(url) {
                 )
                 const warehouseSuffix = chiUrlParams[chiUrlParams.length - 1]
                 return {
-                    downloadCnpmShell: `git clone https://github.com.cnpmjs.org/${warehouseSuffix}`,
-                    download91chiShell: `git clone https://github.91chi.fun//https://github.com/${warehouseSuffix}`,
-                    downloadHubShell: `git clone https://hub.fastgit.org/${warehouseSuffix}`,
-                    cnpmDownloadUrl: `https://github.com.cnpmjs.org/${warehouseSuffix}`,
-                    chiDownloadUrl: url,
-                    hubDownloadUrl: `https://hub.fastgit.org/${warehouseSuffix}`,
+                    type: 3,
+                    downloadShell: [
+                        `git clone https://github.com.cnpmjs.org/${warehouseSuffix}`,
+                        `git clone https://github.91chi.fun//https://github.com/${warehouseSuffix}`,
+                        `git clone https://hub.fastgit.org/${warehouseSuffix}`,
+                    ],
                 }
             }
         } else {
             const urlParams = url.split('https://github.com/')
             const warehouseSuffix = urlParams[urlParams.length - 1]
             return {
-                downloadCnpmShell: `git clone https://github.com.cnpmjs.org/${warehouseSuffix}`,
-                download91chiShell: `git clone https://github.91chi.fun//https://github.com/${warehouseSuffix}`,
-                downloadHubShell: `git clone https://hub.fastgit.org/${warehouseSuffix}`,
-                cnpmDownloadUrl: `https://github.com.cnpmjs.org/${warehouseSuffix}`,
-                chiDownloadUrl: `https://github.91chi.fun//https://github.com/${warehouseSuffix}`,
-                hubDownloadUrl: `https://hub.fastgit.org/${warehouseSuffix}`,
+                type: 3,
+                downloadShell: [
+                    `git clone https://github.com.cnpmjs.org/${warehouseSuffix}`,
+                    `git clone https://github.91chi.fun//https://github.com/${warehouseSuffix}`,
+                    `git clone https://hub.fastgit.org/${warehouseSuffix}`,
+                ],
             }
         }
     }

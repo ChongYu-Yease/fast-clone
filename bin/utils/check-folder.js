@@ -18,7 +18,7 @@ const getWarehouseName = require('./get-warehouse-name')
  * @param {仓库url} url
  * @returns
  */
-module.exports = async (url) => {
+module.exports = function checkFolder(url) {
     // 通过url获取仓库名称
     const warehouseName = getWarehouseName(url)
     // 读取当前目录下所有文件列表
