@@ -36,5 +36,8 @@
         "ora": "^5.4.1",
         "request": "^2.88.2",
         "semver": "^7.3.5"
+    },
+    "devDependencies": {
+        "prettier": "^2.5.1"
     }
 }
