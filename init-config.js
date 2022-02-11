@@ -108,14 +108,14 @@ const recoverPackageVersion = async () => {
 const runLinkCommand = async () => {
 	// 执行 npm link 移除全局指令 start
 
-	console.log(chalk.blueBright(`\n===> 开始安装全局指令 \n`))
+	console.log(chalk.blueBright(`===> 开始安装全局指令 `))
 
 	await execa('npm link', {
 		shell: true,
 		stdio: [2, 2, 2]
 	})
 
-	console.log(chalk.blueBright(`\n===> 全局指令已安装完成 \n`))
+	console.log(chalk.blueBright(`===> 全局指令已安装完成 `))
 
 	// 执行 npm link 移除全局指令 end
 }
@@ -124,7 +124,7 @@ const runLinkCommand = async () => {
  */
 const runUnlinkCommand = async (command) => {
 	// 执行 npm unlink 移除全局指令 原来下载的cli 指令也会失效 所以采用删除的方式
-	console.log(chalk.blueBright('\n===> 开始移除全局指令\n'))
+	console.log(chalk.blueBright('===> 开始移除全局指令'))
 
 	// 获取cli包的地址
 	const { stdout } = await execa(`which ${command}`, {
@@ -137,7 +137,7 @@ const runUnlinkCommand = async (command) => {
 		stdio: [2, 2, 2]
 	})
 
-	console.log(chalk.blueBright('\n===> 已移除全局指令\n'))
+	console.log(chalk.blueBright('===> 已移除全局指令'))
 
 	// 执行 npm unlink 移除全局指令 end
 }
@@ -147,14 +147,14 @@ const runUnlinkCommand = async (command) => {
 const runInstallCommand = async () => {
 	// 安装依赖包 start
 
-	console.log(chalk.greenBright('\n===> 开始安装依赖包\n'))
+	console.log(chalk.greenBright('===> 开始安装依赖包'))
 
 	await execa('npm install', {
 		shell: true,
 		stdio: [2, 2, 2]
 	})
 
-	console.log(chalk.greenBright('\n===> 依赖包安装完成\n'))
+	console.log(chalk.greenBright('===> 依赖包安装完成'))
 
 	// 安装依赖包 end
 }
@@ -169,13 +169,13 @@ const runPublishCommand = async () => {
 	}).catch(async (error) => {
 		if (error.exitCode === 1) {
 			const oladVersion = await recoverPackageVersion()
-			console.log(chalk.redBright('\n发布失败，正在回滚package.json 的版本号和\n'))
+			console.log(chalk.redBright('发布失败，正在回滚package.json 的版本号和'))
 			const packageValue = {
 				version: oladVersion
 			}
 			// 修改项目的package.json的内容
 			await writePackage(packageValue)
-			console.log(chalk.greenBright('\npackage.json 的版本号回滚成功\n'))
+			console.log(chalk.greenBright('package.json 的版本号回滚成功'))
 			process.exit(1)
 		}
 	})
