@@ -13,9 +13,8 @@
  */
 
 module.exports = function getDownloadOption(url) {
-	// 如果下载地址是gitlab
 	if (url.includes('gitlab')) {
-		// 从gitlab下载项目 无需加速
+		// 如果下载地址是gitlab 大概率走的是公司的内网 无需加速
 		return {
 			type: 1,
 			downloadShell: `git clone ${url}`
@@ -30,31 +29,32 @@ module.exports = function getDownloadOption(url) {
 		const isHub = url.includes('https://hub.fastgit.org')
 		const isCnpmjs = url.includes('https://github.com.cnpmjs.org')
 		const is91chi = url.includes('https://github.91chi.fun')
-
 		if (isHub || isCnpmjs || is91chi) {
-			if (isHub) {
-				const hubUrlParams = url.split('hub.fastgit.org/')
-				const warehouseSuffix = hubUrlParams[hubUrlParams.length - 1]
-				return {
-					type: 3,
-					downloadShell: [
-						`git clone https://github.com.cnpmjs.org/${warehouseSuffix}`,
-						`git clone https://github.91chi.fun//https://github.com/${warehouseSuffix}`,
-						`git clone https://github.91chi.fun//https://github.com/${warehouseSuffix}`,
-						`git clone ${url}`
-					]
-				}
-			}
 			if (isCnpmjs) {
 				const cnpmUrlParams = url.split('github.com.cnpmjs.org/')
 				const warehouseSuffix = cnpmUrlParams[cnpmUrlParams.length - 1]
+
 				return {
 					type: 3,
 					downloadShell: [
 						`git clone ${url}`,
-						`git clone https://github.91chi.fun//https://github.com/${warehouseSuffix}`,
 						`git clone https://hub.fastgit.org/${warehouseSuffix}`,
-						`git clone ${url}`
+						`git clone https://github.91chi.fun//https://github.com/${warehouseSuffix}`,
+						`git clone https://github.com/${warehouseSuffix}`
+					]
+				}
+			}
+			if (isHub) {
+				const hubUrlParams = url.split('hub.fastgit.org/')
+				const warehouseSuffix = hubUrlParams[hubUrlParams.length - 1]
+
+				return {
+					type: 3,
+					downloadShell: [
+						`git clone https://github.com.cnpmjs.org/${warehouseSuffix}`,
+						`git clone ${url}`,
+						`git clone https://github.91chi.fun//https://github.com/${warehouseSuffix}`,
+						`git clone https://github.com/${warehouseSuffix}`
 					]
 				}
 			}
@@ -62,13 +62,14 @@ module.exports = function getDownloadOption(url) {
 			if (is91chi) {
 				const chiUrlParams = url.split('https://github.91chi.fun//https://github.com/')
 				const warehouseSuffix = chiUrlParams[chiUrlParams.length - 1]
+
 				return {
 					type: 3,
 					downloadShell: [
 						`git clone https://github.com.cnpmjs.org/${warehouseSuffix}`,
-						`git clone https://github.91chi.fun//https://github.com/${warehouseSuffix}`,
 						`git clone https://hub.fastgit.org/${warehouseSuffix}`,
-						`git clone ${url}`
+						`git clone ${url}`,
+						`git clone https://github.com/${warehouseSuffix}`
 					]
 				}
 			}
