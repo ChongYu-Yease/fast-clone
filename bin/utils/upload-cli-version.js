@@ -2,8 +2,11 @@ const execa = require('execa')
 const fs = require('fs')
 const path = require('path')
 const packagePath = path.resolve(__dirname, '../../package.json')
-const { name } = JSON.parse(fs.readFileSync(packagePath))
+const {
+	name
+} = JSON.parse(fs.readFileSync(packagePath))
 const chalk = require('chalk')
+
 /**
  * 将依赖包更新到指定的版本号
  * @param {最新的版本号} latestVersion

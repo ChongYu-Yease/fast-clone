@@ -1,6 +1,6 @@
 /**
- *
- * @param {用户输入的仓库下载路径} url
+ * 用户输入的仓库下载路径
+ * @param {String} url
  * @returns {
  *              type 仓库类型 1:gitlab 2:码云 3:github
  *              downloadCnpmShell:cnmp的下载指令

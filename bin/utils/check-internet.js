@@ -8,7 +8,7 @@ const ora = require('ora')
 module.exports = async () => {
 	const spinner = ora('正在检查网络...').start()
 	const online = await isOnline({
-		timeout: 1000,
+		timeout: 3000,
 		version: 'v4'
 	})
 	if (!online) {

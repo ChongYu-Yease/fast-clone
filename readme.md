@@ -1,6 +1,6 @@
 ### 背景及痛点
 
-    国内访问github.com在不加速的情况下特别慢，在github下载仓库的时候同样也慢，所以fast-clone cli 出现了
+    国内访问github.com在不加速的情况下特别慢，在github下载仓库的时候同样也慢，所以 fast-clone cli 出现了
 
 ### 实现原理
 

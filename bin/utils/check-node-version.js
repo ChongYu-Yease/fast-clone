@@ -1,12 +1,15 @@
-/**
- * 检查当前node版本
- */
 const semver = require('semver')
 const chalk = require('chalk')
 const getPackage = require('./get-package')
 
+/**
+ * 检查当前node版本
+ */
 module.exports = async function checkNodeVersion() {
-	const { engines, name } = getPackage()
+	const {
+		engines,
+		name
+	} = getPackage()
 	// node范围
 	const requiredVersion = engines.node
 	const compliantVersion = semver.satisfies(process.version, requiredVersion, {

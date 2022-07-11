@@ -2,13 +2,21 @@ const semver = require('semver')
 const co = require('co')
 const prompt = require('co-prompt')
 const chalk = require('chalk')
-const { promisify } = require('util')
+const {
+	promisify
+} = require('util')
 const uploadCliVersion = require('./upload-cli-version')
 const fs = require('fs')
 const path = require('path')
 const packagePath = path.resolve(__dirname, '../../package.json')
-const { name, version } = JSON.parse(fs.readFileSync(packagePath))
+const {
+	name,
+	version
+} = JSON.parse(fs.readFileSync(packagePath))
 const ora = require('ora')
+
+
+
 /**
  * 检查线上最新的脚手架版本号
  */
@@ -24,7 +32,10 @@ module.exports = async function checkCliVersion() {
 		process.exit(1)
 	})
 	spinner.succeed(chalk.green(`版本检查完成`))
-	const { body, statusCode } = result
+	const {
+		body,
+		statusCode
+	} = result
 	if (statusCode === 200) {
 		const parseBody = JSON.parse(body)
 		// 获取最新的cli版本

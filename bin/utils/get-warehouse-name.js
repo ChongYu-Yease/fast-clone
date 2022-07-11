@@ -1,7 +1,7 @@
 /**
  * 获取仓库名称
  * @param {string} url
- * returns 仓库名称
+ * @returns { string } 仓库名称
  */
 module.exports = function getWarehouseName(url) {
     // 获取仓库名称 start
